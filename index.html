@@ -9,7 +9,7 @@
     
     <style>
         :root { --gold: #f1c40f; --white: #ffffff; --blue: #1a2a6c; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; min-height: 100vh; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; min-height: 100vh; cursor: pointer; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
         .container { max-width: 600px; width: 90%; text-align: center; padding: 40px 20px; z-index: 10; }
@@ -47,8 +47,9 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body onload="initPage()">
+<body onload="initPage()" onclick="playMusic()">
 
+    <audio id="bgMusic" src="song.mp3" loop></audio>
     <div id="overlay" onclick="closeCert()"></div>
 
     <div class="container">
@@ -87,7 +88,7 @@
     <div id="cert-modal">
         <h3 style="font-family: 'Dancing Script'; font-size: 1.8rem; color: #1a2a6c; margin:0;">Celebrating Your Achievement ✨</h3>
         <p style="margin: 10px 0;">This is to proudly certify that</p>
-        <h1 style="color: #b21f1f; margin: 5px 0; font-family: 'Poppins'; uppercase;">VANDANA</h1>
+        <h1 style="color: #b21f1f; margin: 5px 0; font-family: 'Poppins';">VANDANA</h1>
         <p style="margin: 5px 0;">has successfully cleared the</p>
         <h2 style="color: #1a2a6c; margin: 5px 0;">RRB CLERK EXAMINATION 2026</h2>
         <p style="font-style: italic; font-size: 0.9rem;">through dedication, consistency, and determination.</p>
@@ -98,8 +99,6 @@
     <script>
         const name = "Vandana"; 
         const typingMsg = "Hard work always wins… and today, you proved it.";
-        
-        // ALL FUN MESSAGES COMBINED (OLD + NEW)
         const funMsgs = [
             "Party kab de rahi ho? 😄", "Ab treat banti hai 😎", "Banker ho gayi ho, ab toh rich ho 😂", "Salary aate hi yaad aaunga kya 😌💸",
             "Ab toh ghar wale bhi sunenge tumhari 😎", "Ab rishton ki line lagne wali hai 😂", "Form bharne se leke selection tak… legend ho tum 🔥",
@@ -123,22 +122,28 @@
         let msgInterval;
         let lastIndex = -1;
 
+        function playMusic() {
+            let music = document.getElementById('bgMusic');
+            music.play().catch(e => console.log("Music needs interaction"));
+        }
+
         function initPage() {
             document.getElementById('main-title').innerText = `Congratulations ${name}! 🎉`;
-            
-            // 1. Typing Effect
             let i = 0;
             function type() { if (i < typingMsg.length) { document.getElementById("typing-text").innerHTML += typingMsg.charAt(i); i++; setTimeout(type, 50); } }
             type();
 
-            // 2. Realistic Progress Bar
             let width = 0; let bar = document.getElementById("myBar");
             let pInt = setInterval(() => { if (width >= 100) clearInterval(pInt); else { width++; bar.style.width = width + "%"; } }, 20);
 
-            // 3. Initial Celebration
-            confetti({ particleCount: 120, spread: 100, origin: { y: 0.6 }, scalar: 1.1 });
-            setTimeout(() => { confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0 } }); }, 200);
-            setTimeout(() => { confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1 } }); }, 400);
+            // 3 X 3 TRIPLE SIDE FIREWORKS (9 Total bursts)
+            for(let j=0; j<3; j++) {
+                setTimeout(() => {
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.6 } });
+                    confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
+                }, j * 1000); // 1-1 second ke gap pe 3 baar triple burst
+            }
         }
 
         function updateMessage() {
@@ -149,8 +154,7 @@
         }
 
         function megaCelebration() {
-            let audio = new Audio("https://www.soundjay.com/human/applause-8.mp3");
-            audio.play().catch(e => {});
+            playMusic();
             updateMessage();
             if (!msgInterval) { msgInterval = setInterval(updateMessage, 2000); }
             var duration = 15 * 1000; var animationEnd = Date.now() + duration;
@@ -159,14 +163,14 @@
                 if (timeLeft <= 0) return clearInterval(interval);
                 launchRocket(Math.random());
             }, 800);
-            for (let i = 1; i <= 20; i++) { setTimeout(() => { createHeartPhoto(i); }, i * 400); }
+            for (let i = 1; i <= 13; i++) { setTimeout(() => { createHeartPhoto(i); }, i * 600); }
         }
 
         function launchRocket(xPos) { confetti({ particleCount: 80, angle: 90, spread: 50, origin: { x: xPos, y: 0.9 }, startVelocity: 45, gravity: 1.2 }); }
 
         function createHeartPhoto(index) {
             const img = document.createElement('img');
-            img.src = `p${index}.jpeg`; img.className = 'floating-photo';
+            img.src = `p${index}.jpg`; img.className = 'floating-photo';
             img.style.left = (Math.random() * 80 + 5) + 'vw';
             const size = Math.random() * 40 + 80; img.style.width = size + 'px'; img.style.height = (size + 10) + 'px';
             document.body.appendChild(img);
