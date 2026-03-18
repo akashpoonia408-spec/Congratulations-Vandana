@@ -66,7 +66,7 @@
     <div id="overlay" onclick="closeCert()"></div>
 
     <div class="container">
-        <div class="badge">🏅 Proud Banker</div>
+        <div class="badge">🏅 Proud Banker🏅</div>
         <h1 id="main-title">Congratulations! 🎉</h1>
         <div id="typing-text"></div>
         
@@ -169,7 +169,7 @@
         function megaCelebration() {
             playMusic();
             updateMessage();
-            if (!msgInterval) { msgInterval = setInterval(updateMessage, 2000); }
+            if (!msgInterval) { msgInterval = setInterval(updateMessage, 4000); }
             var duration = 15 * 1000; var animationEnd = Date.now() + duration;
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
