@@ -8,56 +8,76 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { --gold: #f1c40f; --white: #ffffff; --blue: #1a2a6c; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; min-height: 100vh; cursor: pointer; }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        :root { --gold: #f1c40f; --dark-blue: #1a2a6c; --soft-white: #f8f9fa; }
         
-        .container { max-width: 600px; width: 90%; text-align: center; padding: 40px 20px; z-index: 10; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 2.8rem; margin-bottom: 5px; }
-        #typing-text { font-style: italic; font-size: 0.9rem; color: var(--gold); min-height: 20px; margin-bottom: 15px; }
-        
-        .badge { background: var(--gold); color: black; padding: 5px 15px; border-radius: 20px; display: inline-block; font-weight: bold; margin-bottom: 20px; }
-        
-        .progress-container { width: 100%; background: rgba(255,255,255,0.2); border-radius: 20px; margin: 20px 0; overflow: hidden; }
-        .progress-bar { width: 0%; height: 10px; background: var(--gold); border-radius: 20px; }
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at center, #1a2a6c 0%, #0d1b3e 100%);
+            color: white; display: flex; flex-direction: column; align-items: center; 
+            overflow-x: hidden; min-height: 100vh; cursor: pointer;
+        }
 
-        .card { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        
-        .timeline { text-align: left; margin: 30px 0; border-left: 3px solid var(--gold); padding-left: 25px; }
-        .timeline-item { margin-bottom: 20px; position: relative; font-size: 0.9rem; }
-        .timeline-item::before { content: '⭐'; position: absolute; left: -38px; background: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; justify-content: center; align-items: center; font-size: 12px; }
+        /* Subtle Background Stars */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3; z-index: 1; pointer-events: none;
+        }
 
-        .btn { background: var(--gold); color: var(--blue); border: none; padding: 15px 30px; font-weight: 800; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .container { max-width: 600px; width: 90%; text-align: center; padding: 40px 20px; z-index: 10; position: relative; }
+        
+        /* Responsive Title */
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 5px; color: var(--gold); text-shadow: 0 0 10px rgba(241, 196, 15, 0.3); }
+
+        /* Smooth Typing with Cursor */
+        #typing-text { font-style: italic; font-size: 0.95rem; color: #fff; min-height: 25px; margin-bottom: 20px; display: inline-block; }
+        #typing-text::after { content: "|"; animation: blink 1s infinite; margin-left: 5px; color: var(--gold); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .badge { background: var(--gold); color: var(--dark-blue); padding: 6px 18px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.2); }
+
+        .progress-container { width: 100%; background: rgba(255,255,255,0.1); border-radius: 20px; margin: 25px 0; overflow: hidden; height: 12px; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #f1c40f, #f39c12); border-radius: 20px; transition: width 0.1s linear; }
+
+        .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; margin-bottom: 20px; transition: 0.3s; }
+        
+        .timeline { text-align: left; margin: 25px 0; border-left: 2px solid var(--gold); padding-left: 20px; }
+        .timeline-item { margin-bottom: 15px; position: relative; font-size: 0.85rem; color: #ddd; }
+        .timeline-item strong { color: var(--gold); }
+        .timeline-item::before { content: '⭐'; position: absolute; left: -32px; font-size: 12px; }
+
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+        .btn { 
+            background: var(--gold); color: var(--dark-blue); border: none; padding: 14px 28px; 
+            font-weight: 800; border-radius: 50px; cursor: pointer; transition: 0.4s; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 0.9rem;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 0 20px var(--gold); }
         .btn:active { transform: scale(0.95); }
 
+        /* Floating Photo - Premium Look */
+        .floating-photo { 
+            position: fixed; bottom: -250px; object-fit: cover; border-radius: 20px; 
+            border: 4px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            z-index: 100; animation: floatUp 7s linear forwards; 
+        }
+        @keyframes floatUp { 
+            0% { transform: translateY(0) rotate(-5deg); opacity: 0; } 
+            15% { opacity: 1; } 
+            100% { transform: translateY(-140vh) rotate(10deg); opacity: 0; } 
+        }
+
+        /* Premium Certificate */
         #cert-modal { 
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 90%; max-width: 500px; background: white; color: #333; padding: 30px; 
-            border-radius: 15px; border: 8px double var(--gold); z-index: 2000; text-align: center;
-            animation: popCert 0.4s ease forwards;
+            width: 85%; max-width: 450px; background: #fff; color: #222; padding: 35px; 
+            border-radius: 10px; border: 10px double var(--gold); z-index: 2000; text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8); animation: popCert 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        @keyframes popCert { from { transform: translate(-50%, -60%) scale(0.8); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-
-        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1500; }
+        @keyframes popCert { from { opacity: 0; transform: translate(-50%, -60%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
         
-       .floating-photo { 
-    position: fixed; 
-    bottom: -250px; 
-    object-fit: cover; 
-    /* Photo ko bada aur rounded banane ke liye */
-    border-radius: 15px; 
-    border: 5px solid white; 
-    box-shadow: 0 13px 29px rgba(0,0,0,0.3);
-    z-index: 999; /* Isse photo sabse upar dikhegi */
-    animation: floatUp 6s linear forwards; 
-}
-
-@keyframes floatUp { 
-    0% { transform: translateY(0) rotate(0deg); opacity: 0; } 
-    15% { opacity: 1; } 
-    100% { transform: translateY(-140vh) rotate(20deg); opacity: 0; } 
-}        #party-msg { display: none; font-size: 1.4rem; color: var(--gold); font-weight: 800; margin-top: 20px; min-height: 60px; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1500; }
+        #party-msg { font-size: 1.2rem; color: var(--gold); font-weight: 700; margin-top: 20px; min-height: 50px; transition: 0.5s; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body onload="initPage()" onclick="playMusic()">
@@ -66,47 +86,57 @@
     <div id="overlay" onclick="closeCert()"></div>
 
     <div class="container">
-        <div class="badge">🏅 Proud Banker🏅</div>
+        <div class="badge">BANKER 2026</div>
         <h1 id="main-title">Congratulations! 🎉</h1>
         <div id="typing-text"></div>
         
         <div class="progress-container">
             <div class="progress-bar" id="myBar"></div>
         </div>
-        <p style="font-size: 0.8rem; margin-top: -15px;">Dream → Completed 100%</p>
+        <p style="font-size: 0.75rem; margin-top: -15px; color: #bbb;">Dream Status: Secured ✅</p>
 
         <div class="card">
-            <h2 style="color: var(--gold); margin: 0;">RRB Clerk Selection 2026</h2>
-            <p>"Yeh sirf ek job nahi, yeh tumhari mehnat ka result hai." ❤️</p>
+            <h2 style="color: var(--gold); margin: 0; font-size: 1.3rem;">RRB Clerk Selection 2026</h2>
+            <p style="font-size: 0.9rem; opacity: 0.9;">"Yeh tumhari mehnat aur junoon ka inaam hai."</p>
         </div>
 
         <div class="timeline">
-            <div class="timeline-item"><strong>Preparation:</strong> The Journey of Hard Work.</div>
-            <div class="timeline-item"><strong>Persistence:</strong> Sleepless nights & Mocks.</div>
-            <div class="timeline-item" style="color: var(--gold);"><strong>Success:</strong> RRB Clerk Selected! 🏆</div>
+            <div class="timeline-item"><strong>Preparation:</strong> Consistent Hard Work.</div>
+            <div class="timeline-item"><strong>Persistence:</strong> Facing the Challenges.</div>
+            <div class="timeline-item"><strong>Success:</strong> RRB Clerk Selected! 🏆</div>
         </div>
 
-        <div class="card" style="font-size:0.9rem; font-style: italic; border-left: 5px solid var(--gold);">
+        <div class="card" style="font-size:0.85rem; font-style: italic; border-left: 4px solid var(--gold); background: rgba(241, 196, 15, 0.05);">
             “Result wale din ka wo moment… jab naam list me dekha — usse bada reward koi nahi hota.” ❤️
         </div>
 
-        <div class="btn-group" style="margin-top:20px; display: flex; gap:10px; justify-content:center;">
+        <div class="btn-group">
             <button class="btn" onclick="megaCelebration()">SURPRISE! 🎆</button>
-            <button class="btn" style="background: white;" onclick="showCert()">VIEW CERTIFICATE 📜</button>
+            <button class="btn" style="background: white; border: 1px solid #ddd;" onclick="showCert()">📜 CERTIFICATE</button>
         </div>
         
-        <p id="party-msg"></p>
+        <div id="party-msg"></div>
     </div>
 
     <div id="cert-modal">
-        <h3 style="font-family: 'Dancing Script'; font-size: 1.8rem; color: #1a2a6c; margin:0;">Celebrating Your Achievement ✨</h3>
-        <p style="margin: 10px 0;">This is to proudly certify that</p>
-        <h1 style="color: #b21f1f; margin: 5px 0; font-family: 'Poppins';">VANDANA</h1>
-        <p style="margin: 5px 0;">has successfully cleared the</p>
-        <h2 style="color: #1a2a6c; margin: 5px 0;">RRB CLERK EXAMINATION 2026</h2>
-        <p style="font-style: italic; font-size: 0.9rem;">through dedication, consistency, and determination.</p>
-        <h4 style="color: #b21f1f; margin-top: 15px;">We are incredibly proud of you ❤️</h4>
-        <button class="btn" onclick="closeCert()" style="margin-top: 10px;">Close</button>
+        <h3 style="font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--dark-blue); margin:0;">Achievement Certificate ✨</h3>
+        <p style="margin: 10px 0; font-size: 0.8rem;">This is to proudly certify that</p>
+        <h1 style="color: #b21f1f; margin: 5px 0; font-family: 'Poppins'; font-size: 2rem;">VANDANA</h1>
+        <p style="margin: 5px 0; font-size: 0.9rem;">has successfully cleared the</p>
+        <h2 style="color: var(--dark-blue); margin: 5px 0; font-size: 1.2rem;">RRB CLERK EXAMINATION 2026</h2>
+        <p style="font-style: italic; font-size: 0.8rem; margin: 15px 0;">through dedication, consistency, and determination.</p>
+        
+        <div style="margin-top: 25px; display: flex; justify-content: space-around; font-size: 0.7rem;">
+            <div>
+                <p style="margin:0;">Date: 15 Mar 2026</p>
+            </div>
+            <div>
+                <p style="margin:0; text-decoration: underline;">____________________</p>
+                <p style="margin:2px 0 0 0;">Authorized Signature</p>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="closeCert()" style="margin-top: 20px; padding: 10px 20px; font-size: 0.8rem;">Close</button>
     </div>
 
     <script>
@@ -116,13 +146,8 @@
             "Party kab de rahi ho? 😄", "Ab treat banti hai 😎", "Banker ho gayi ho, ab toh rich ho 😂", "Salary aate hi yaad aaunga kya 😌💸",
             "Ab toh ghar wale bhi sunenge tumhari 😎", "Ab rishton ki line lagne wali hai 😂", "Form bharne se leke selection tak… legend ho tum 🔥",
             "Ab toh loan bhi approve kara dogi na? 😏", "Ab toh ATM bhi tumhe salute karega 😄", "Study mode → Success mode ON ✅",
-            "Finally padhai ka kuch use hua 😂", "Mock test wale din yaad hai? 😭", "Ab tension free ya next exam ready? 👀",
-            "Ab neend puri kar lo… deserve karti ho 😴", "Ab Sunday bhi special ho gaya 😄", "Clerk today… Officer tomorrow 🔥",
-            "Proud moment hai… but party bhi zaroori hai 😄", "Itni mehnat ke baad treat toh banti hai 💖", "Tum jeeti… ab ham khayenge 🍕😂",
-            "Success tumhari… celebration hamara 😎", "Khushi double tab hogi jab pizza aayega 🍕", "Yeh toh bas shuruaat hai 💯",
-            "Next target: Promotion 📈", "Ab mummy ka favourite officially tum ho 😂", "Ab relatives ka favourite question: ‘kitni salary?’ 😭",
-            "Ab form fill karne wale tumse advice lenge 😄", "Ab tension nahi… sirf transaction 😎", "Ab struggle story reel ban sakti hai 🎬",
-            "Ab asli sawaal: party kab? 😏", "Success ke saath pizza free milta hai na? 🍕😂", "Hard work ka result… aur hamari bhookh ka solution 😄",
+            "Finally padhai ka kuch use hua 😂", "Mock test wale din yaad hai? 😭", "Ab neend puri kar lo… deserve karti ho 😴",
+            "Clerk today… Officer tomorrow 🔥", "Tum jeeti… ab ham khayenge 🍕😂", "Success tumhari… celebration hamara 😎",
             "Ab toh chai bhi ‘bank wali chai’ ho gayi ☕😂", "Tumhari signature ki value badh gayi hai 😎", 
             "Ab se tum line me nahi… log tumhari line me lagenge 😏", "Ab tumhari life me debit-credit hi chalne wala hai 😂",
             "Ab tumhara ‘busy hoon’ legit reason ban gaya 😄", "Ab ghar me financial advisor officially tum ho 📊",
@@ -137,31 +162,34 @@
 
         function playMusic() {
             let music = document.getElementById('bgMusic');
-            music.play().catch(e => console.log("Music needs interaction"));
+            music.play().catch(e => {});
         }
 
         function initPage() {
             document.getElementById('main-title').innerText = `Congratulations ${name}! 🎉`;
+            
+            // 1. Smooth Typing (35ms speed)
             let i = 0;
-            function type() { if (i < typingMsg.length) { document.getElementById("typing-text").innerHTML += typingMsg.charAt(i); i++; setTimeout(type, 50); } }
+            function type() { 
+                if (i < typingMsg.length) { 
+                    document.getElementById("typing-text").innerHTML += typingMsg.charAt(i); 
+                    i++; setTimeout(type, 35); 
+                } 
+            }
             type();
 
+            // 2. Realistic Progress
             let width = 0; let bar = document.getElementById("myBar");
-            let pInt = setInterval(() => { if (width >= 100) clearInterval(pInt); else { width++; bar.style.width = width + "%"; } }, 20);
-
-            // 3 X 3 TRIPLE SIDE FIREWORKS (9 Total bursts)
-            for(let j=0; j<3; j++) {
-                setTimeout(() => {
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                    confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0, y: 0.6 } });
-                    confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
-                }, j * 1000); // 1-1 second ke gap pe 3 baar triple burst
-            }
+            let pInt = setInterval(() => { 
+                if (width >= 100) clearInterval(pInt); 
+                else { width++; bar.style.width = width + "%"; } 
+            }, 25);
+            
+            // Note: No initial fireworks for a clean UX.
         }
 
         function updateMessage() {
             const msgElement = document.getElementById('party-msg');
-            msgElement.style.display = 'block';
             let nI; do { nI = Math.floor(Math.random() * funMsgs.length); } while (nI === lastIndex);
             lastIndex = nI; msgElement.innerText = funMsgs[nI];
         }
@@ -169,29 +197,55 @@
         function megaCelebration() {
             playMusic();
             updateMessage();
-            if (!msgInterval) { msgInterval = setInterval(updateMessage, 4000); }
-            var duration = 15 * 1000; var animationEnd = Date.now() + duration;
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                launchRocket(Math.random());
-            }, 800);
-            for (let i = 1; i <= 13; i++) { setTimeout(() => { createHeartPhoto(i); }, i * 600); }
-        }
+            if (!msgInterval) { msgInterval = setInterval(updateMessage, 4000); } // 4 seconds gap
+            
+            // VARIATION CONFETTI
+            const duration = 15 * 1000;
+            const end = Date.now() + duration;
 
-        function launchRocket(xPos) { confetti({ particleCount: 80, angle: 90, spread: 50, origin: { x: xPos, y: 0.9 }, startVelocity: 45, gravity: 1.2 }); }
+            (function frame() {
+                confetti({
+                    particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#f1c40f', '#ffffff']
+                });
+                confetti({
+                    particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#f1c40f', '#ffffff']
+                });
+
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            // Big Burst on Start
+            confetti({ particleCount: 150, spread: 90, startVelocity: 55, gravity: 0.8, ticks: 200, colors: ['#f1c40f', '#ffffff'] });
+
+            // Floating Photos (p1 to p13)
+            for (let k = 1; k <= 13; k++) { 
+                setTimeout(() => { createHeartPhoto(k); }, k * 700); 
+            }
+        }
 
         function createHeartPhoto(index) {
             const img = document.createElement('img');
-            img.src = `p${index}.jpg`; img.className = 'floating-photo';
-            img.style.left = (Math.random() * 80 + 5) + 'vw';
-            const size = Math.random() * 40 + 80; img.style.width = size + 'px'; img.style.height = (size + 10) + 'px';
+            img.src = `p${index}.jpg`; 
+            img.className = 'floating-photo';
+            img.style.left = (Math.random() * 60 + 10) + 'vw';
+            
+            // Controlled size for Premium look
+            const size = Math.random() * 40 + 180; 
+            img.style.width = size + 'px'; 
+            img.style.height = 'auto';
+            
             document.body.appendChild(img);
-            setTimeout(() => { img.remove(); }, 6000);
+            setTimeout(() => { img.remove(); }, 7000);
         }
 
-        function showCert() { document.getElementById('cert-modal').style.display = 'block'; document.getElementById('overlay').style.display = 'block'; }
-        function closeCert() { document.getElementById('cert-modal').style.display = 'none'; document.getElementById('overlay').style.display = 'none'; }
+        function showCert() { 
+            document.getElementById('cert-modal').style.display = 'block'; 
+            document.getElementById('overlay').style.display = 'block'; 
+        }
+        function closeCert() { 
+            document.getElementById('cert-modal').style.display = 'none'; 
+            document.getElementById('overlay').style.display = 'none'; 
+        }
     </script>
 </body>
 </html>
